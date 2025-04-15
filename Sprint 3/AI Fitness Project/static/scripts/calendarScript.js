@@ -118,7 +118,7 @@ function openPopup(){
 }
 
 function cardioLink() {
-  window.open("/Sprint 3/AI Fitness Project/templates/cardio-log.html", "_blank");
+  window.open("/cardio-log", "_blank");
 }
 
 function muscularLink() {

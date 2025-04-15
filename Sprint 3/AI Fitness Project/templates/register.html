@@ -4,27 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Page</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/register.css') }}">
 </head>
 <body>
-    <h1>Register</h1>
+    <div class="center-container">
+        <h1>FitAI</h1>
 
-    <form method="POST" action="">
-        {{ form.hidden_tag() }}
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
 
-       <div style="padding-bottom: 15px;">
-        {{ form.username }}
-        {{ form.password }}
-       </div> 
+            <div id="username">{{ form.username }}</div>
+            <div id="password">{{ form.password }}</div>
+            <div id="first_name">{{ form.first_name }}</div>
+            <div id="last_name">{{ form.last_name }}</div>
+            <div id="submit">{{ form.submit }}</div>
+        </form>
 
-       <div style="padding-bottom: 15px;">
-        {{ form.first_name }}
-        {{ form.last_name }}
-       </div> 
-        
-        
-        {{ form.submit }}
-    </form>
-
-    <a href="{{ url_for('login') }}">Already have an account? Log In</a>
+        <a href="{{ url_for('login') }}">Already have an account? Log In</a>
+    </div>
 </body>
 </html>
