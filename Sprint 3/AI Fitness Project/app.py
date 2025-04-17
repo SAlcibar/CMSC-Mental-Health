@@ -25,6 +25,8 @@ login_manager.login_view = "login"
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+login_manager.login_message = None
+
 
 
 # Renders home page
@@ -62,6 +64,7 @@ def main_chat():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
+        flash("Login successful!")
         user = User.query.filter_by(username=form.username.data).first()
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
@@ -83,6 +86,7 @@ def register():
 
 
     if form.validate_on_submit():
+        flash("Registration Successful!")
         hashed_password = bcrypt.generate_password_hash(form.password.data)
         new_user = User(username=form.username.data, password=hashed_password, first_name=form.first_name.data, last_name=form.last_name.data)
         db.session.add(new_user)
@@ -112,6 +116,7 @@ def workout_log():
     form = FitnessLogWorkoutForm()
 
     if form.validate_on_submit():
+        flash("Workout Log Submitted!")
         exercises = request.form.getlist('exercise_input')
         sets = request.form.getlist('sets_field')
         reps = request.form.getlist('reps_field')
@@ -135,6 +140,7 @@ def cardio_log():
     form = FitnessLogCardioForm()
 
     if request.method == 'POST' and form.validate_on_submit():
+        flash("Cardio Log Submitted!")
         distances = request.form.getlist('distance_field')
         minutes = request.form.getlist('minute_field')
         seconds = request.form.getlist('second_field')

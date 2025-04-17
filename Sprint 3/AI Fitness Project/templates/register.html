@@ -22,5 +22,15 @@
 
         <a href="{{ url_for('login') }}">Already have an account? Log In</a>
     </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div id="flash-container">
+        {% for message in messages %}
+          <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
 </body>
 </html>

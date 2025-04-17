@@ -72,3 +72,31 @@ body {
     border-color: black;
     outline: none;
 }
+
+#flash-container {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    text-align: center;
+}
+
+.flash-message {
+    display: inline-block;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    opacity: 1;
+    animation: fadeOut 2s forwards;
+}
+
+/* Fade out animation */
+@keyframes fadeOut {
+    0%   { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { opacity: 0; }
+}

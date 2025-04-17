@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/survey.css') }}">
     <title>Document</title>
 </head>
 <body>
@@ -19,5 +20,14 @@
         <br>
         {{ form.submit() }}
     </form>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div id="flash-container">
+        {% for message in messages %}
+          <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
 </body>
 </html>
