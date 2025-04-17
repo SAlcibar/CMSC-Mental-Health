@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, SelectMultipleField
 from wtforms.validators import InputRequired, Length, ValidationError, DataRequired, NumberRange
 from backend.tables import User
 from datetime import time
+from flask import flash
 
 # Sets up the form on the register page
 class RegisterForm(FlaskForm):
@@ -17,9 +18,8 @@ class RegisterForm(FlaskForm):
         existing_user = User.query.filter_by(
             username=username.data).first()
         if existing_user:
-            raise ValidationError(
-                "That username already exists."
-            )
+            flash("Username already exists!")
+            raise ValidationError("That username already exists.")
         
 
 # Sets up form on login page
