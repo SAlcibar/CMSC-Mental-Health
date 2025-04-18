@@ -1,65 +1,58 @@
-html, body{
+body {
     margin: 0;
     padding: 0;
+    display: flex;
+    height: 100vh;
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #f9f9f9; /* Light blue background */
 }
-#navbar {
-        * {
-        text-decoration: none;
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
-    .navbar {
-        background: gray;
-        font-family: calibri; 
-        padding: 10px 20px;
-    }
-    .navdiv {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .logo a {
-        color: white;
-        font-size: 21px;
-        font-weight: bold;
-    }
-    ul {
-        display: flex;
-        list-style: none;
-        padding: 0;
-    }
-    li {
-        margin-right: 38px;
-    }
-    li a {
-        color: white;
-        font-size: 25px;
-        font-weight: bold;
-    }
-    li a:hover{
-        color: lightgray;
-    }
-    .buttons {
-        display: flex;
-        gap: 10px; 
-    }
-    button {
-        background-color: black;
-        border: none;
-        border-radius: 10px;
-        padding: 10px;
-        width: 90px;
-        cursor: pointer;
-    }
-    button a {
-        color: white;
-        font-weight: bold;
-        font-size: 15px;
-        display: block;
-        text-align: center;
-    }
-    button a:hover{
-        color:lightgray;
-    }
+
+.sidebar {
+    width: 250px;
+    background-color: #2a6478; /* Dark blue sidebar */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar .logo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.sidebar .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar .menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 15px;
+    text-align: left;
+    border-radius: 4px;
+    background-color: transparent;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.sidebar .menu a:hover {
+    color: #d9e8ea; /* Lighter blue on hover */
+    transform: scale(1.05);
+}
+
+.main-content {
+    flex: 1; /* Take up the remaining space to the right of the navbar */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    padding: 20px;
+    text-align: center;
+    background-color: #f9f9f9; /* Light gray background for the main content */
 }

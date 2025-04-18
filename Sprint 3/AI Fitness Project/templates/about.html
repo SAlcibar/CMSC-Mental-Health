@@ -4,9 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/navbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/about.css') }}">
 </head>
 <body>
     {% include 'navbar.html' %}
-    <h1>About Page</h1>
+    <div class="about-container">
+        <div class="about-content">
+            <h1>About Page</h1>
+            <p>
+                This software is designed to help our users achieve their fitness goals by providing them with tools.
+                Our program gives our users the ability to track their workouts and have the ability to speak to the chatbot
+                to get a proper workout routine and advice on how to achieve their goals.
+            </p>
+        </div>
+    </div>
 </body>
 </html>
