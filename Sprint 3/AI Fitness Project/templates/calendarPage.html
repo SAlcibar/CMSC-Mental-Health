@@ -39,17 +39,15 @@
     }
     
     .calendar-container {
-  width: 90vw;
-  height: 90vw;
-  max-width: 2000px;
-  max-height: 2000px;
-  aspect-ratio: 1 / 1; 
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  background-color: var(--bg-card);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+    width: 90%;
+    max-width: 1000px;
+    margin: 0 auto;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    background-color: var(--bg-card);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
     
     .calendar-container:hover {
@@ -123,11 +121,11 @@
     }
     
     .days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 1vw;
-  padding: 2vw;
-  background-color: var(--bg);
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    padding: 20px;
+    background-color: var(--bg);
 }
 
 .days button {
@@ -135,7 +133,7 @@
   aspect-ratio: 1 / 1;
   background-color: white;
   border: 1px solid var(--box-border);
-  font-size: clamp(10px, 2vw, 16px);
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   border-radius: var(--box-radius);
