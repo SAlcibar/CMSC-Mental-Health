@@ -210,7 +210,6 @@
         background-color: white;
         padding: 20px;
         border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         text-align: center;
         max-width: 300px;
         width: 90%;
@@ -230,7 +229,6 @@
         border: none;   
         font-weight: 600;
         background-color: #e0e7ff;
-        cursor: pointer;
         transition: background-color 0.2s;
     }
 
@@ -425,12 +423,13 @@
         });
 
         document.getElementById('popupCardioBtn').addEventListener('click', function () {
-            window.open('/Sprint 3/AI Fitness Project/templates/cardio-log.html');
-        });
+            window.open('https://www.google.com/');
+    });
 
-        document.getElementById('popupMuscularBtn').addEventListener('click', function () {
-            window.open('/Sprint 3/AI Fitness Project/templates/fitness-log.html');
-        });
+    document.getElementById('popupMuscularBtn').addEventListener('click', function () {
+        window.open('https://www.google.com/');
+    });
+
 
       function updateSelectedDate(date) {
         const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
