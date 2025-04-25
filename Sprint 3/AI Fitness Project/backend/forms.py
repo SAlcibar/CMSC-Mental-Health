@@ -44,6 +44,53 @@ class SurveyForm(FlaskForm):
         widget=widgets.ListWidget(prefix_label=False)
     )
 
+    fitness_experience = SelectMultipleField(
+        "What is your fitness experience level?",
+        choices=[
+            ("Beginner", "Beginner"),
+            ("Intermediate", "Intermediate"),
+            ("Advanced", "Advanced")
+        ],
+        option_widget=widgets.CheckboxInput(),
+        widget=widgets.ListWidget(prefix_label=False)
+    )
+
+    workout_time = SelectMultipleField(
+        "What time of day do you prefer to work out?",
+        choices=[
+            ("Morning", "Morning"),
+            ("Afternoon", "Afternoon"),
+            ("Evening", "Evening"),
+            ("No Preference", "No Preference")
+        ],
+        option_widget=widgets.CheckboxInput(),
+        widget=widgets.ListWidget(prefix_label=False)
+    )
+
+    dietary_preferences = SelectMultipleField(
+        "Do you have any dietary preferences or restrictions?",
+        choices=[
+            ("Vegetarian", "Vegetarian"),
+            ("Vegan", "Vegan"),
+            ("Gluten-Free", "Gluten-Free"),
+            ("No Restrictions", "No Restrictions")
+        ],
+        option_widget=widgets.CheckboxInput(),
+        widget=widgets.ListWidget(prefix_label=False)
+    )
+
+    fitness_challenges = SelectMultipleField(
+        "What are your biggest fitness challenges?",
+        choices=[
+            ("Time Management", "Time Management"),
+            ("Motivation", "Motivation"),
+            ("Injury Recovery", "Injury Recovery"),
+            ("Access to Equipment", "Access to Equipment")
+        ],
+        option_widget=widgets.CheckboxInput(),
+        widget=widgets.ListWidget(prefix_label=False)
+    )
+
     submit = SubmitField("Submit")
 
 # Sets up form on workout log page

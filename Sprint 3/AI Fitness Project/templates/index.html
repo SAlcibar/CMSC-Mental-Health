@@ -10,11 +10,12 @@
     {% include 'navbar.html' %}
     <h1 style="padding-bottom: 10px;">Welcome, {{ first_name|capitalize }}!</h1>
     <a href="{{ url_for('survey') }}">Edit Fitness Goals</a>
+
+    <!-- Fitness Goals -->
     <h2 style="padding-bottom: 10px;">Your Fitness Goals:</h2>
     <ul>
         {% if fitness_goals %}
             {% for goal in fitness_goals %}
-               
                 <li style="padding-left: 20px;">
                     {{ goal }}
                 </li>
@@ -23,7 +24,64 @@
             <p>No fitness goals set.</p>
         {% endif %}
     </ul>
-  {% with messages = get_flashed_messages() %}
+
+    <!-- Fitness Experience -->
+    <h2 style="padding-bottom: 10px;">Your Fitness Experience Level:</h2>
+    <ul>
+        {% if fitness_experience %}
+            {% for experience in fitness_experience %}
+                <li style="padding-left: 20px;">
+                    {{ experience }}
+                </li>
+            {% endfor %}
+        {% else %}
+            <p>No fitness experience level set.</p>
+        {% endif %}
+    </ul>
+
+    <!-- Preferred Workout Time -->
+    <h2 style="padding-bottom: 10px;">Your Preferred Workout Time:</h2>
+    <ul>
+        {% if workout_time %}
+            {% for time in workout_time %}
+                <li style="padding-left: 20px;">
+                    {{ time }}
+                </li>
+            {% endfor %}
+        {% else %}
+            <p>No preferred workout time set.</p>
+        {% endif %}
+    </ul>
+
+    <!-- Dietary Preferences -->
+    <h2 style="padding-bottom: 10px;">Your Dietary Preferences:</h2>
+    <ul>
+        {% if dietary_preferences %}
+            {% for preference in dietary_preferences %}
+                <li style="padding-left: 20px;">
+                    {{ preference }}
+                </li>
+            {% endfor %}
+        {% else %}
+            <p>No dietary preferences set.</p>
+        {% endif %}
+    </ul>
+
+    <!-- Fitness Challenges -->
+    <h2 style="padding-bottom: 10px;">Your Fitness Challenges:</h2>
+    <ul>
+        {% if fitness_challenges %}
+            {% for challenge in fitness_challenges %}
+                <li style="padding-left: 20px;">
+                    {{ challenge }}
+                </li>
+            {% endfor %}
+        {% else %}
+            <p>No fitness challenges set.</p>
+        {% endif %}
+    </ul>
+
+    {% with messages = get_flashed_messages() %}
     {% if messages %}
       <div id="flash-container">
         {% for message in messages %}
@@ -31,7 +89,6 @@
         {% endfor %}
       </div>
     {% endif %}
-  {% endwith %}
-  
+    {% endwith %}
 </body>
 </html>

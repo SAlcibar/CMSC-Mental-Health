@@ -1,439 +1,14 @@
-<!--   
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Chat</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <style>
-        #navbar {
-            width: 100%;
-            background-color: #333;
-            color: white;
-        }
-
-        body {
-            font-family: 'Times New Roman', Times, serif; /* Set font to Times New Roman */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #f0f0f0; /* Light gray background */
-        }
-
-        .chat-container {
-            width: 100%;
-            max-width: 1100px;
-            border-radius: 8px;
-            background-color: #ffffff; /* White background for the chat container */
-            display: flex;
-            flex-direction: column;
-            height: 70vh;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            border: 1px solid #ccc;
-            margin-top: 20px;
-        }
-
-        .chat-header {
-            padding: 20px;
-            background-color: #808080; /* Gray header color */
-            color: white;
-            text-align: center;
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        .chat-window {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            background-color: #f9f9f9; /* Light gray background for the chat window */
-        }
-
-        .chat-bubble {
-            max-width: 75%;
-            padding: 18px 22px;
-            border-radius: 12px;
-            font-size: 17px;
-            line-height: 1.6;
-            word-wrap: break-word;
-            position: relative;
-        }
-
-        .chat-bubble.user {
-            align-self: flex-end;
-            background-color: #808080; /* Gray color for user messages */
-            color: white;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .chat-bubble.user::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            right: -10px;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 10px 0 10px 10px;
-            border-color: transparent transparent transparent #808080;
-            transform: translateY(-50%);
-        }
-
-        .chat-bubble.bot {
-            align-self: flex-start;
-            background-color: #e0e0e0; /* Light gray for bot messages */
-            color: #333;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .chat-bubble.bot::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: -10px;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 10px 10px 10px 0;
-            border-color: transparent #e0e0e0 transparent transparent;
-            transform: translateY(-50%);
-        }
-
-        .chat-input-container {
-            display: flex;
-            padding: 15px;
-            gap: 15px;
-            border-top: 1px solid #ddd;
-            background-color: #ffffff;
-        }
-
-        .chat-input {
-            flex: 1;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-            font-family:'Times New Roman', Times, serif; /* Set font to Times New Roman */
-            font-weight: bold; /* Match font weight with the banner */
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        .chat-input:focus {
-            border-color: #808080; /* Gray focus color */
-        }
-
-        .send-button {
-            padding: 15px 25px;
-            background-color: #808080; /* Gray button color */
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 22px; /* Match font size with the banner */
-            font-weight: bold; /* Match font weight with the banner */
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            font-family: 'Times New Roman', Times, serif; /* Set font to Times New Roman */
-        }
-
-        .send-button:hover {
-            background-color: #6e6e6e; /* Slightly darker gray on hover */
-            transform: scale(1.05);
-        }
-
-        .chat-window::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .chat-window::-webkit-scrollbar-thumb {
-            background-color: #ccc;
-            border-radius: 4px;
-        }
-
-        .chat-window::-webkit-scrollbar-thumb:hover {
-            background-color: #aaa;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/chat.css') }}">
 </head>
 <body>
     {% include 'navbar.html' %}
-    <div class="chat-container">
-        <div class="chat-header">AI Chat</div>
-        <div class="chat-window" id="chat-window"></div>
-        <div class="chat-input-container">
-            <input type="text" id="user-input" class="chat-input" placeholder="Type your message..." />
-            <button id="send-button" class="send-button">Send</button>
-        </div>
-    </div>
-    <script>
-        const chatWindow = document.getElementById('chat-window');
-        const userInput = document.getElementById('user-input');
-        const sendButton = document.getElementById('send-button');
-
-        sendButton.addEventListener('click', () => {
-            const message = userInput.value.trim();
-            if (message) {
-                const userBubble = document.createElement('div');
-                userBubble.className = 'chat-bubble user';
-                userBubble.textContent = message;
-                chatWindow.appendChild(userBubble);
-                chatWindow.scrollTop = chatWindow.scrollHeight;
-                userInput.value = '';
-                setTimeout(() => {
-                    const botBubble = document.createElement('div');
-                    botBubble.className = 'chat-bubble bot';
-                    botBubble.textContent = 'So excited to work soon!';
-                    chatWindow.appendChild(botBubble);
-                    chatWindow.scrollTop = chatWindow.scrollHeight;
-                }, 400);
-            }
-        });
-
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendButton.click();
-            }
-        });
-    </script>
-</body>
-</html>
-
--->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Chat</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <style>
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            background-color: #e6f2f5;
-        }
-
-        .sidebar {
-            width: 250px;
-            background-color: #2a6478;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar .logo {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .sidebar .menu {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .sidebar .menu a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            padding: 10px 15px;
-            text-align: left;
-            border-radius: 4px;
-            background-color: transparent;
-            transition: color 0.3s ease, transform 0.2s ease;
-        }
-
-        .sidebar .menu a:hover {
-            color: #d9e8ea;
-            transform: scale(1.05);
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 20px;
-        }
-
-        .chat-container {
-            width: 100%;
-            max-width: 1100px;
-            border-radius: 8px;
-            background-color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            height: 90%;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            border: 1px solid #ccc;
-        }
-
-        .chat-header {
-            padding: 20px;
-            background-color: #2a6478;
-            color: white;
-            text-align: center;
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        .chat-window {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            background-color: #f9f9f9;
-        }
-
-        .chat-bubble {
-            max-width: 75%;
-            padding: 18px 22px;
-            border-radius: 12px;
-            font-size: 17px;
-            line-height: 1.6;
-            word-wrap: break-word;
-            position: relative;
-        }
-
-        .chat-bubble.user {
-            align-self: flex-end;
-            background-color: #2a6478;
-            color: white;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .chat-bubble.user::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            right: -10px;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 10px 0 10px 10px;
-            border-color: transparent transparent transparent #2a6478;
-            transform: translateY(-50%);
-        }
-
-        .chat-bubble.bot {
-            align-self: flex-start;
-            background-color: #d9e8ea;
-            color: #333;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .chat-bubble.bot::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: -10px;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 10px 10px 10px 0;
-            border-color: transparent #d9e8ea transparent transparent;
-            transform: translateY(-50%);
-        }
-
-        .chat-input-container {
-            display: flex;
-            padding: 15px;
-            gap: 15px;
-            border-top: 1px solid #ddd;
-            background-color: #ffffff;
-        }
-
-        .chat-input {
-            flex: 1;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        .chat-input:focus {
-            border-color: #2a6478;
-        }
-
-        .send-button {
-            padding: 15px 25px;
-            background-color: #2a6478;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .send-button:hover {
-            background-color: #1e4b5c;
-            transform: scale(1.05);
-        }
-
-        .chat-window::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .chat-window::-webkit-scrollbar-thumb {
-            background-color: #ccc;
-            border-radius: 4px;
-        }
-
-        .chat-window::-webkit-scrollbar-thumb:hover {
-            background-color: #aaa;
-        }
-    </style>
-</head>
-<body>
-    <div class="sidebar">
-        <div class="logo">FitAI</div>
-        <div class="menu">
-            <a href="/">Home</a>
-            <a href="/about">About</a>
-            <a href="/fitness-log">Fitness Log</a>
-            <a href="{{ url_for('logout') }}">Sign Out</a>
-        </div>
-    </div>
     <div class="main-content">
         <div class="chat-container">
             <div class="chat-header">AI Chat</div>
@@ -449,25 +24,53 @@
         const userInput = document.getElementById('user-input');
         const sendButton = document.getElementById('send-button');
 
-        sendButton.addEventListener('click', () => {
+        // Function to add a chat bubble to the chat window
+        function addChatBubble(message, sender) {
+            const bubble = document.createElement('div');
+            bubble.className = `chat-bubble ${sender}`;
+            bubble.textContent = message;
+            chatWindow.appendChild(bubble);
+            chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to the bottom
+        }
+
+        // Event listener for the send button
+        sendButton.addEventListener('click', async () => {
             const message = userInput.value.trim();
             if (message) {
-                const userBubble = document.createElement('div');
-                userBubble.className = 'chat-bubble user';
-                userBubble.textContent = message;
-                chatWindow.appendChild(userBubble);
-                chatWindow.scrollTop = chatWindow.scrollHeight;
+             // Add the user's message to the chat window
+                addChatBubble(message, 'user');
+
+                // Clear the input field
                 userInput.value = '';
-                setTimeout(() => {
-                    const botBubble = document.createElement('div');
-                    botBubble.className = 'chat-bubble bot';
-                    botBubble.textContent = 'So excited to work soon!';
-                    chatWindow.appendChild(botBubble);
-                    chatWindow.scrollTop = chatWindow.scrollHeight;
-                }, 400);
+
+                try {
+                    // Send the message to the server
+                    const response = await fetch('/main-chat', {
+                        method: 'POST',
+                        headers: {
+                           'Content-Type': 'application/json'
+                      },
+                     body: JSON.stringify({ message })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        const botMessage = data.response;
+
+                        // Add the bot's response to the chat window
+                        addChatBubble(botMessage, 'bot');
+                    } else {
+                        console.error('Error:', response.statusText);
+                        addChatBubble('Error: Unable to get a response from the server.', 'bot');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    addChatBubble('Error: Something went wrong.', 'bot');
+                }
             }
         });
 
+        // Allow pressing Enter to send a message
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 sendButton.click();

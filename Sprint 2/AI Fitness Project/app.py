@@ -1,10 +1,10 @@
-from flask import Flask, render_template, session, request
+from flask import Flask, render_template, session, request # type: ignore
 import os
 from backend.db import db
 from backend.tables import User
-from flask_login import LoginManager, login_required, login_user, logout_user, current_user
-from flask import Flask, render_template, redirect, url_for, flash
-from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, login_required, login_user, logout_user, current_user # type: ignore
+from flask import Flask, render_template, redirect, url_for, flash # type: ignore
+from flask_bcrypt import Bcrypt # type: ignore
 from backend.forms import RegisterForm, LoginForm, SurveyForm, FitnessLogWorkoutForm, FitnessLogCardioForm
 from backend.tables import User, WorkoutTable, CardioTable
 import secrets
