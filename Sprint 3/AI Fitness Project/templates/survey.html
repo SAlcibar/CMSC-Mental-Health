@@ -7,32 +7,73 @@
     <title>Fitness Survey</title>
 </head>
 <body>
+    <!-- Add rectangles explicitly -->
+    <div class="left-rectangle"></div>
+    <div class="right-rectangle"></div>
+
     <div class="survey-container">
         <h1>Fitness Survey</h1>
         <p>Please fill out the survey below to help us personalize your fitness experience.</p>
 
         <form method="POST" class="survey-form">
             {{ form.hidden_tag() }}
+
+            <!-- Fitness Goals -->
             <div class="form-group">
-                {{ form.fitness_goals.label }}<br>
-                {{ form.fitness_goals(class="form-field") }}
+                <label class="question-label">{{ form.fitness_goals.label.text }}</label>
+                {% for subfield in form.fitness_goals %}
+                <div class="input-label-container">
+                    {{ subfield }}
+                    <label class="answer-label" for="{{ subfield.id }}">{{ subfield.label.text }}</label>
+                </div>
+                {% endfor %}
             </div>
+
+            <!-- Fitness Experience -->
             <div class="form-group">
-                {{ form.fitness_experience.label }}<br>
-                {{ form.fitness_experience(class="form-field") }}
+                <label class="question-label">{{ form.fitness_experience.label.text }}</label>
+                {% for subfield in form.fitness_experience %}
+                <div class="input-label-container">
+                    {{ subfield }}
+                    <label class="answer-label" for="{{ subfield.id }}">{{ subfield.label.text }}</label>
+                </div>
+                {% endfor %}
             </div>
+
+            <!-- Workout Time -->
             <div class="form-group">
-                {{ form.workout_time.label }}<br>
-                {{ form.workout_time(class="form-field") }}
+                <label class="question-label">{{ form.workout_time.label.text }}</label>
+                {% for subfield in form.workout_time %}
+                <div class="input-label-container">
+                    {{ subfield }}
+                    <label class="answer-label" for="{{ subfield.id }}">{{ subfield.label.text }}</label>
+                </div>
+                {% endfor %}
             </div>
+
+            <!-- Dietary Preferences -->
             <div class="form-group">
-                {{ form.dietary_preferences.label }}<br>
-                {{ form.dietary_preferences(class="form-field") }}
+                <label class="question-label">{{ form.dietary_preferences.label.text }}</label>
+                {% for subfield in form.dietary_preferences %}
+                <div class="input-label-container">
+                    {{ subfield }}
+                    <label class="answer-label" for="{{ subfield.id }}">{{ subfield.label.text }}</label>
+                </div>
+                {% endfor %}
             </div>
+
+            <!-- Fitness Challenges -->
             <div class="form-group">
-                {{ form.fitness_challenges.label }}<br>
-                {{ form.fitness_challenges(class="form-field") }}
+                <label class="question-label">{{ form.fitness_challenges.label.text }}</label>
+                {% for subfield in form.fitness_challenges %}
+                <div class="input-label-container">
+                    {{ subfield }}
+                    <label class="answer-label" for="{{ subfield.id }}">{{ subfield.label.text }}</label>
+                </div>
+                {% endfor %}
             </div>
+
+            <!-- Submit Button -->
             <div class="form-group">
                 {{ form.submit(class="submit-button") }}
             </div>

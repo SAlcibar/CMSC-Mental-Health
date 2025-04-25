@@ -1,9 +1,10 @@
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, SelectMultipleField, widgets, IntegerField, FieldList, FormField, DecimalField, TimeField
-from wtforms.validators import InputRequired, Length, ValidationError, DataRequired, NumberRange
+from flask_wtf import FlaskForm # type: ignore
+from wtforms import StringField, PasswordField, SubmitField, SelectMultipleField, widgets, IntegerField, FieldList, FormField, DecimalField, TimeField # type: ignore
+from wtforms.validators import InputRequired, Length, ValidationError, DataRequired, NumberRange # type: ignore
 from backend.tables import User
 from datetime import time
-from flask import flash
+from wtforms import RadioField # type: ignore
+from flask import flash # type: ignore
 
 # Sets up the form on the register page
 class RegisterForm(FlaskForm):
@@ -32,6 +33,7 @@ class LoginForm(FlaskForm):
 
 # Sets up form on survey page
 class SurveyForm(FlaskForm):
+    # First question: Multiple selection (checkboxes)
     fitness_goals = SelectMultipleField(
         "What are your fitness goals?",
         choices=[
@@ -44,17 +46,18 @@ class SurveyForm(FlaskForm):
         widget=widgets.ListWidget(prefix_label=False)
     )
 
-    fitness_experience = SelectMultipleField(
+    # Second question: Single selection (radio buttons)
+    fitness_experience = RadioField(
         "What is your fitness experience level?",
         choices=[
             ("Beginner", "Beginner"),
             ("Intermediate", "Intermediate"),
             ("Advanced", "Advanced")
         ],
-        option_widget=widgets.CheckboxInput(),
         widget=widgets.ListWidget(prefix_label=False)
     )
 
+    # Third question: Multiple selection (checkboxes)
     workout_time = SelectMultipleField(
         "What time of day do you prefer to work out?",
         choices=[
@@ -67,7 +70,8 @@ class SurveyForm(FlaskForm):
         widget=widgets.ListWidget(prefix_label=False)
     )
 
-    dietary_preferences = SelectMultipleField(
+    # Fourth question: Single selection (radio buttons)
+    dietary_preferences = RadioField(
         "Do you have any dietary preferences or restrictions?",
         choices=[
             ("Vegetarian", "Vegetarian"),
@@ -75,10 +79,10 @@ class SurveyForm(FlaskForm):
             ("Gluten-Free", "Gluten-Free"),
             ("No Restrictions", "No Restrictions")
         ],
-        option_widget=widgets.CheckboxInput(),
         widget=widgets.ListWidget(prefix_label=False)
     )
 
+    # Fifth question: Multiple selection (checkboxes)
     fitness_challenges = SelectMultipleField(
         "What are your biggest fitness challenges?",
         choices=[

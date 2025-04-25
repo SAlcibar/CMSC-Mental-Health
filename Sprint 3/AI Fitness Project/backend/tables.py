@@ -9,6 +9,10 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(20), nullable=False)
     last_name = db.Column(db.String(20), nullable=False)
     fitness_goals = db.Column(db.String(255), nullable=True)
+    fitness_experience = db.Column(db.String(255), nullable=True)  # Comma-separated fitness experience levels
+    workout_time = db.Column(db.String(255), nullable=True)  # Comma-separated preferred workout times
+    dietary_preferences = db.Column(db.String(255), nullable=True)  # Comma-separated dietary preferences
+    fitness_challenges = db.Column(db.String(255), nullable=True)  # Comma-separated fitness challenges
 
 # Creates workout log table 
 class WorkoutTable(db.Model):
