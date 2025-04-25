@@ -39,14 +39,18 @@
     }
     
     .calendar-container {
-      width: 100vw;
-      height: 100vw;
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow);
-      background-color: var(--bg-card);
-      overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+  width: 90vw;
+  height: 90vw;
+  max-width: 2000px;
+  max-height: 2000px;
+  aspect-ratio: 1 / 1; 
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  background-color: var(--bg-card);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
     
     .calendar-container:hover {
       transform: translateY(-5px);
@@ -119,32 +123,31 @@
     }
     
     .days {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 12px;
-      padding: 20px;
-      background-color: var(--bg);
-      height: 70vh;
-    }
-    
-    .days button {
-      aspect-ratio: 1;
-      height: 200px;
-      width: 200px;
-      background-color: white;
-      border: 1px solid var(--box-border);
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      border-radius: var(--box-radius);
-      color: var(--text);
-      transition: all 0.2s ease;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: var(--box-shadow);
-    }
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1vw;
+  padding: 2vw;
+  background-color: var(--bg);
+}
+
+.days button {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: white;
+  border: 1px solid var(--box-border);
+  font-size: clamp(10px, 2vw, 16px);
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--box-radius);
+  color: var(--text);
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--box-shadow);
+}
+
     
     .days button:hover:not([disabled]) {
       border-color: var(--primary-light);
@@ -333,6 +336,7 @@
   </style>
 </head>
 <body>
+    {% include 'navbar.html' %}
   <div class="calendar-container">
     <div class="calendar-header">
       <div class="month-year">April 2025</div>
@@ -359,8 +363,10 @@
       <span class="selected-date-label">Selected Date:</span> April 24, 2025
     </div>
     <div class="calendar-footer">
-      <button class="calendar-action" id="reset-btn">Today</button>
-      <button class="calendar-action primary" id="select-btn">Select Date</button>
+        <button class="calendar-action" id="reset-btn">Today</button>
+        <button class="calendar-action primary" id="select-btn">Select Date</button>
+      </div>
+      
       <div id="popupWindow" class="popup-overlay">
         <div class="popup-content">
           <h3>Select Activity</h3>
@@ -371,6 +377,7 @@
           <button id="popupCloseBtn">Close</button>
         </div>
       </div>
+      
       
     </div>
   </div>
@@ -418,11 +425,11 @@
         });
 
         document.getElementById('popupCardioBtn').addEventListener('click', function () {
-            alert('Cardio selected!');
+            window.open('/Sprint 3/AI Fitness Project/templates/cardio-log.html');
         });
 
         document.getElementById('popupMuscularBtn').addEventListener('click', function () {
-            alert('Muscular selected!');
+            window.open('/Sprint 3/AI Fitness Project/templates/fitness-log.html');
         });
 
       function updateSelectedDate(date) {
