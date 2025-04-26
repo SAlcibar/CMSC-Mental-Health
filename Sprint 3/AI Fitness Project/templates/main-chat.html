@@ -11,7 +11,10 @@
     {% include 'navbar.html' %}
     <div class="main-content">
         <div class="chat-container">
-            <div class="chat-header">AI Chat</div>
+            <div class="chat-header">
+                AI Chat
+                <button id="reset-chat-button" class="reset-chat-button">Reset Chat</button>
+            </div>
             <div class="chat-window" id="chat-window"></div>
             <div class="chat-input-container">
                 <input type="text" id="user-input" class="chat-input" placeholder="Type your message..." />
@@ -23,10 +26,11 @@
         const chatWindow = document.getElementById('chat-window');
         const userInput = document.getElementById('user-input');
         const sendButton = document.getElementById('send-button');
-    
+        const resetChatButton = document.getElementById('reset-chat-button');
+
         // Load recent chat context
         const recentContext = `{{ recent_context | safe }}`;
-        if (recentContext) {
+        if (recentContext.trim()) {
             const lines = recentContext.split('\n');
             lines.forEach(line => {
                 if (line.startsWith('User:')) {
@@ -36,7 +40,7 @@
                 }
             });
         }
-    
+
         // Function to add a chat bubble to the chat window
         function addChatBubble(message, sender) {
             const bubble = document.createElement('div');
@@ -45,21 +49,21 @@
             chatWindow.appendChild(bubble);
             chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to the bottom
         }
-    
+
         // Function to handle sending a message
         async function handleSendMessage() {
             const message = userInput.value.trim();
             if (message) {
                 addChatBubble(message, 'user');
                 userInput.value = '';
-    
+
                 try {
                     const response = await fetch('/main-chat', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ message })
                     });
-    
+
                     if (response.ok) {
                         const data = await response.json();
                         addChatBubble(data.response, 'bot');
@@ -71,7 +75,7 @@
                 }
             }
         }
-    
+
         // Event listener for the send button
         sendButton.addEventListener('click', handleSendMessage);
 
@@ -82,10 +86,39 @@
                 handleSendMessage();
             }
         });
-    
-        // Trigger exit chat logic when the user leaves the page
+
+        // Trigger chat saving when navigating away from the chat page
         window.addEventListener('beforeunload', async () => {
-            await fetch('/exit-chat', { method: 'POST' });
+            try {
+                await fetch('/exit-chat', { method: 'POST' });
+            } catch (error) {
+                console.error('Error saving chat context:', error);
+            }
+        });
+
+        // Trigger chat saving when logging out
+        const logoutButton = document.getElementById('logout-button'); // Ensure your logout button has this ID
+        if (logoutButton) {
+            logoutButton.addEventListener('click', async () => {
+                try {
+                    await fetch('/exit-chat', { method: 'POST' });
+                } catch (error) {
+                    console.error('Error saving chat context:', error);
+                }
+            });
+        }
+
+        // Function to reset the chat
+        resetChatButton.addEventListener('click', async () => {
+            try {
+                // Trigger the exit-chat endpoint to save the context
+                await fetch('/exit-chat', { method: 'POST' });
+
+                // Clear the chat window
+                chatWindow.innerHTML = '';
+            } catch (error) {
+                console.error('Error resetting chat context:', error);
+            }
         });
     </script>
 </body>

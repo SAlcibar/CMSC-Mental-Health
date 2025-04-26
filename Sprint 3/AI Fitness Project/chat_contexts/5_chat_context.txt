@@ -1,0 +1,4 @@
+User: yo
+AI: Hello! How can I assist you with your fitness goals today?
+User: nothing much thanks gng
+AI: I'm here to help whenever you're ready to work on your fitness goals! If you have any questions or need guidance, feel free to ask.

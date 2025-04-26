@@ -1,15 +1,16 @@
-from flask import Flask, render_template, session, request, redirect, url_for, flash  # type: ignore
+from flask import Flask, render_template, session, request, redirect, url_for, flash, jsonify  # type: ignore # Add jsonify here
 from flask_bcrypt import Bcrypt  # type: ignore
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user  # type: ignore
-from flask_migrate import Migrate
+from flask_migrate import Migrate # type: ignore
 from backend.db import db
 from backend.tables import User, WorkoutTable, CardioTable
 from backend.forms import RegisterForm, LoginForm, SurveyForm, FitnessLogWorkoutForm, FitnessLogCardioForm
 import secrets
 import openai  # type: ignore # Import the OpenAI library
-
+import os
 
 # Set your OpenAI API key
+
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -29,7 +30,7 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))  # Use Session.get() instead of Query.get()
 login_manager.login_message = None
 
 # Define routes
@@ -80,9 +81,27 @@ def about():
 @app.route('/main-chat', methods=['GET', 'POST'])
 @login_required
 def chat():
+    user_id = current_user.id
+    chat_context_file = os.path.join("chat_contexts", f"{user_id}_chat_context.txt")
+
+    # Ensure the chat context directory exists
+    if not os.path.exists("chat_contexts"):
+        os.makedirs("chat_contexts")
+
     if request.method == 'GET':
-        # Render the main-chat.html page for GET requests
-        return render_template('main-chat.html')
+        # Load recent chat context
+        if os.path.exists(chat_context_file):
+            with open(chat_context_file, 'r') as file:
+                recent_context = file.read().strip()
+        else:
+            recent_context = ""
+
+        # If the file is empty, set recent_context to an empty string
+        if not recent_context:
+            recent_context = ""
+
+        # Render the main-chat.html page with recent context
+        return render_template('main-chat.html', recent_context=recent_context)
 
     if request.method == 'POST':
         # Retrieve the user's survey responses
@@ -99,8 +118,15 @@ def chat():
         if not user_message:
             return {"error": "No message provided"}, 400
 
+        # Load recent chat context
+        if os.path.exists(chat_context_file):
+            with open(chat_context_file, 'r') as file:
+                recent_context = file.read()
+        else:
+            recent_context = ""
+
         try:
-            # Prepare the ChatGPT prompt with survey context
+            # Prepare the ChatGPT prompt with survey context and recent chat context
             messages = [
                 {"role": "system", "content": "You are a helpful fitness assistant."},
                 {"role": "system", "content": f"User's fitness goals: {', '.join(survey_context['fitness_goals'])}."},
@@ -108,6 +134,7 @@ def chat():
                 {"role": "system", "content": f"User's preferred workout time: {', '.join(survey_context['workout_time'])}."},
                 {"role": "system", "content": f"User's dietary preferences: {', '.join(survey_context['dietary_preferences'])}."},
                 {"role": "system", "content": f"User's fitness challenges: {', '.join(survey_context['fitness_challenges'])}."},
+                {"role": "system", "content": f"Recent chat context: {recent_context}"},
                 {"role": "user", "content": user_message}
             ]
 
@@ -119,9 +146,64 @@ def chat():
 
             # Extract the response text
             chat_response = response['choices'][0]['message']['content']
+
+            # Append the new conversation to the chat context
+            with open(chat_context_file, 'a') as file:
+                file.write(f"User: {user_message}\nAI: {chat_response}\n")
+
             return {"response": chat_response}, 200
         except Exception as e:
             return {"error": str(e)}, 500
+
+@app.route('/exit-chat', methods=['POST'])
+@login_required
+def exit_chat():
+    user_id = current_user.id
+    chat_context_file = os.path.join("chat_contexts", f"{user_id}_chat_context.txt")
+
+    # Load the full chat context
+    if os.path.exists(chat_context_file):
+        with open(chat_context_file, 'r') as file:
+            full_context = file.read()
+    else:
+        full_context = ""
+
+    # If the chat context is empty, skip summarization
+    if not full_context.strip():
+        return jsonify({'message': 'No chat context to summarize.'}), 200
+
+    # Prompt ChatGPT to summarize the conversation
+    summary_prompt = f"""
+    Summarize the following conversation into 5 bullet points, focusing on important topics covered:
+    {full_context}
+    """
+
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # Updated model
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant summarizing a conversation."},
+                {"role": "user", "content": summary_prompt}
+            ]
+        )
+        summary = response['choices'][0]['message']['content'].strip()
+
+        # Combine the summary with the existing context
+        updated_context = f"Summary:\n{summary}\n\nFull Conversation:\n{full_context}"
+
+        # Write the updated context back to the file
+        with open(chat_context_file, 'w') as file:
+            file.write(updated_context)
+
+        # Optionally clear the chat context after summarization
+        with open(chat_context_file, 'w') as file:
+            file.write("")  # Clear the file
+
+        return jsonify({'message': 'Chat context updated and cleared successfully.'})
+    except Exception as e:
+        print(f"Error summarizing chat context: {e}")
+        return jsonify({'message': 'Error summarizing chat context.'}), 500
+    
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
