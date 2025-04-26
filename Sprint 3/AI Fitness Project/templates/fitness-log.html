@@ -1,238 +1,527 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/fitness-log.css') }}">
-</head>
-<style>
-    .container {
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background: #FDFEFE;
-        margin: 0;
-    }
-
-    .calendar {
-        width: 2500px;
-        height:1500px;
-        background: white;
-        border-radius: 5px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        padding: 5px;
-        text-align: center;
-    }
-
-    header {
-        margin: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 20px;
-        font-size: 60px;
-        color: black;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-    .header-display {
-        display: flex;
-        align-items: center;
-    }
-    .left {
-        padding: 10px;
-        margin: 0;
-        cursor: pointer;
-        font-size: 25px;
-        color: black;
-        border-radius: 5px;
+  <meta charset="UTF-8">
+  <title>Modern Calendar</title>
+  <style>
+    :root {
+      --primary: #2a6478;
+      --primary-light: #2a6478;
+      --primary-dark: #2a6478;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --text-lighter: #94a3b8;
+      --bg: #f8fafc;
+      --bg-card: #ffffff;
+      --border: #e2e8f0;
+      --box-border: #cbd5e1;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      --border-radius: 16px;
+      --box-radius: 10px;
+      --navbar-width: 200px; /* Define navbar width as a variable */
     }
     
-    .right{
-        padding: 10px;
-        margin: 0;
-        cursor: pointer;
-        font-size: 25px;
-        color: black;
-        border-radius: 5px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      overflow: hidden; /* Prevent scrolling on the body */
+    }
+    
+    /* Main content container - respects the navbar */
+    .main-content {
+      display: flex;
+      height: 100vh; /* Full viewport height */
+      padding: 12px;
+      margin-left: var(--navbar-width); /* Space for the sidebar/navbar */
+      box-sizing: border-box;
+    }
+    
+    .calendar-container {
+      width: 100%;
+      height: 100%; /* Full height of the parent container */
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      background-color: var(--bg-card);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex; 
+      flex-direction: column; 
     }
 
+    .calendar-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+    
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 32px 40px; 
+      background-color: #2a6478;
+      color: white;
+      height: 10vh;
+    }
+    
+    .month-year {
+      font-size: 34px; /* Increased font size */
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    
+    .nav-buttons {
+      display: flex;
+      gap: 18px; /* Increased gap */
+    }
+    
+    .nav-button {
+      width: 48px; /* Increased size */
+      height: 48px; /* Increased size */
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 22px; /* Increased font size */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .nav-button:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+    
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      padding: 16px 0;
+      text-align: center;
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--text-light);
+      background-color: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    
     .days {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 10px;
-        font-size: 20px;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      padding: 16px;
+      background-color: var(--bg);
+      flex: 1; /* Allow days container to expand */
+      overflow-y: auto; /* Add scrolling if needed */
     }
 
-    .day{
-        display: flex;
-        justify-content: space-between;
-        align-items: left;
-        padding: 50px;
-        background: #AAB7B8;
-        border-radius: 40px;
-        transition: 0.1s;
-        height: 100px;
-        position: relative;
-    }
-
-    .plus-button:hover{
-        background: transparent;
-        color: white;
-        cursor: pointer;
+    .days button {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background-color: white;
+      border: 1px solid var(--box-border);
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: var(--box-radius);
+      color: var(--text);
+      transition: all 0.2s ease;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--box-shadow);
     }
     
-    .popup{
-        width: 900px;
-        background-color: #f1f1f1;
-        padding: 40px;
-        text-align: center;
-        position: fixed; 
-        bottom: 200px;
-        left: 1050px;
-        right: 500px;
-        border-radius: 30px;
-        align-items: center;
-        height: 400px;
-        bottom: 700px;
-    }
-
-    .cardio{
-        background-color: white;
-        padding: 110px;
-        border-radius: 20px;
-        gap: 30px;
-        color: black;
-        position: relative;
-        margin-left: auto;
-        margin-right: auto;
-        font-size: 20px;
-        border: white;
-    }
-
-    .muscular{
-        background-color: white;
-        padding: 110px;
-        word-spacing: 40px;
-        border-radius: 20px;
-        gap: 30px;
-        font-size: 20px;
-        color: black;
-        position: relative;
-        margin-left: auto;
-        margin-right: auto;
-        border: white;
-    }
-
-    .plus-button {
-        color: black;
-        gap: 10px;
-        font-size: 20px;
-        border: #AAB7B8;
-        background: transparent;
-        align-items: right;
-        height: 5px;
-        margin-top: 10px;
-    }
-
-
-    .days-blank{
-        padding: 10px;
-        background: white;
-        color: white;
-        border-radius: 5px;
-        transition: 0.1s;
-    }
-
-    .bottom-page {
-        width: 100%;
-        background-color: #f1f1f1;
-        padding: 30px;
-        text-align: center;
-        position: fixed; 
-        bottom: 0;
-        left: 0;
-        z-index: 999;
-        height: 500px;
-    }
-
-    .close-button{
-        text-align: right;
-        vertical-align: top;
-        font-size: 20px;
-        cursor: pointer;
-        background: transparent;
-        border: #f1f1f1;
-        width: 20px;
-        height: 20px;
-        left: 400px;
-        right: 10px;
-    }
-
-    .removeButton{
-        position: absolute;   
-        top: 10px;            
-        right: 10px;      
-        font-size: 20px;
-        cursor: pointer;
-        background: transparent;
-        width: 40px;         
-        height: 40px;
-        text-align: center;
-        line-height: 40px;
-    }
-
-    .current-date{
-        background: red;
-        color: white;
-    }
-
-    .days div:hover {
-        background: #E74C3C;
-        color: white;
-        cursor: pointer;
-    }
-
-    .selected {
-        margin-bottom: 10px;
-        padding: 20px;
-        text-align: center;
+    .days button:hover:not([disabled]) {
+      border-color: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
-    .week {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        font-weight: bold;
-        margin-bottom: 5px;
+    .days button.today {
+      color: var(--primary);
+      font-weight: 700;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
     }
 
-    .week div {
-        padding: 10px;
-        color: E74C3C;
-        opacity: 0.5;
+    .days button::before {
+      content: attr(data-day);
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--text-light);
     }
-</style>
+    
+    .days button.today::after {
+      content: '';
+      position: absolute;
+      bottom: 8px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background-color: var(--primary);
+    }
+    
+    .days button.selected {
+      background-color: lightgrey;
+      color: white;
+      font-weight: 600;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+    
+    .days button:disabled {
+      color: var(--text-lighter);
+      border-color: var(--border);
+      background-color: #f1f5f9;
+      box-shadow: none;
+      cursor: default;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .popup-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 300px;
+      width: 90%;
+    }
+
+    .popup-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .popup-buttons button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;   
+      font-weight: 600;
+      background-color: #e0e7ff;
+      transition: background-color 0.2s;
+    }
+
+    .popup-buttons button:hover {
+      background-color: #6366f1;
+      color: white;
+    }
+
+    #popupCloseBtn {
+      background-color: #f1f5f9;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #popupCloseBtn:hover {
+      background-color: #cbd5e1;
+    }
+    
+    .days button.other-month {
+      color: var(--text-lighter);
+      opacity: 0.7;
+    }
+    
+    .current-date {
+      text-align: center;
+      padding: 16px;
+      font-size: 17px;
+      color: var(--text);
+      border-top: 1px solid var(--border);
+      font-weight: 500;
+      background-color: var(--bg-card);
+    }
+    
+    .selected-date-label {
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .calendar-footer {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px;
+      border-top: 1px solid var(--border);
+      background-color: var(--bg-card);
+    }
+    
+    .calendar-action {
+      padding: 12px 24px;
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-weight: 500;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .calendar-action:hover {
+      background-color: var(--primary-light);
+      color: white;
+      border-color: var(--primary-light);
+    }
+    
+    .calendar-action.primary {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    .calendar-action.primary:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .days button {
+      animation: fadeIn 0.3s ease forwards;
+      animation-delay: calc(var(--i) * 0.02s);
+      opacity: 0;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+      .main-content {
+        margin-left: 0;
+        padding: 8px;
+      }
+      
+      .calendar-container {
+        margin: 60px auto 0 auto;
+        height: calc(100vh - 70px);
+      }
+      
+      .weekdays {
+        font-size: 16px;
+      }
+      
+      :root {
+        --navbar-width: 0px; /* Adjust for mobile */
+      }
+      
+      .calendar-header {
+        padding: 24px 20px; /* Smaller padding on mobile */
+      }
+      
+      .month-year {
+        font-size: 28px; /* Smaller font size on mobile */
+      }
+    }
+  </style>
+</head>
 <body>
-    {% include 'navbar.html' %}
-    <div style="padding-bottom: 10px;">
-        <a href="{{ url_for('workout_log') }}">Create New Workout Log</a>
-    </div>
-    <div>
-        <a href="{{ url_for('cardio_log') }}">Create New Cardio Log</a>
-    </div>
-
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <div id="flash-container">
-        {% for message in messages %}
-          <div class="flash-message">{{ message }}</div>
-        {% endfor %}
+  {% include 'navbar.html' %}
+  
+  <div class="main-content">
+    <div class="calendar-container">
+      <div class="calendar-header">
+        <div class="month-year">April 2025</div>
+        <div class="nav-buttons">
+          <button class="nav-button prev-month">←</button>
+          <button class="nav-button next-month">→</button>
+        </div>
       </div>
-    {% endif %}
-  {% endwith %}
+      <div class="weekdays">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+      </div>
+      <div class="days" id="calendar-days"></div>
+      <div class="current-date" id="selected-date">
+        <span class="selected-date-label">Selected Date:</span> April 24, 2025
+      </div>
+      <div class="calendar-footer">
+        <button class="calendar-action" id="reset-btn">Today</button>
+        <button class="calendar-action primary" id="select-btn">Select Date</button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="popupWindow" class="popup-overlay">
+    <div class="popup-content">
+      <h3>Select Activity</h3>
+      <div class="popup-buttons">
+        <button id="popupCardioBtn">Cardio</button>
+        <button id="popupMuscularBtn">Muscular</button>
+      </div>
+      <button id="popupCloseBtn">Close</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      let currentDate = new Date();
+      let selectedDate = new Date();
+      let viewDate = new Date();
+
+      renderCalendar(viewDate);
+
+      document.querySelector('.prev-month').addEventListener('click', function() {
+        viewDate.setMonth(viewDate.getMonth() - 1);
+        renderCalendar(viewDate);
+        this.blur();
+      });
+      
+      document.querySelector('.next-month').addEventListener('click', function() {
+        viewDate.setMonth(viewDate.getMonth() + 1);
+        renderCalendar(viewDate);
+        this.blur();
+      });
+      
+      document.getElementById('reset-btn').addEventListener('click', function() {
+        viewDate = new Date();
+        selectedDate = new Date();
+        renderCalendar(viewDate);
+        updateSelectedDate(selectedDate);
+        this.blur();
+      });
+      
+      document.getElementById('select-btn').addEventListener('click', function() {
+        document.getElementById('popupWindow').style.display = 'flex';
+        this.blur();
+      });
+
+      document.getElementById('popupCloseBtn').addEventListener('click', function() {
+        document.getElementById('popupWindow').style.display = 'none';
+      });
+
+      document.getElementById('popupCardioBtn').addEventListener('click', function() {
+        window.open("{{ url_for('cardio_log') }}");
+      });
+
+      document.getElementById('popupMuscularBtn').addEventListener('click', function() {
+        window.open("{{ url_for('workout_log') }}"); // Fixed to correct endpoint
+      });
+
+      function updateSelectedDate(date) {
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                           'July', 'August', 'September', 'October', 'November', 'December'];
+        document.getElementById('selected-date').innerHTML = 
+          `<span class="selected-date-label">Selected Date:</span> ${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+      }
+      
+      function renderCalendar(date) {
+        const monthYear = document.querySelector('.month-year');
+        const daysContainer = document.getElementById('calendar-days');
+        const today = new Date();
+        
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                           'July', 'August', 'September', 'October', 'November', 'December'];
+        monthYear.textContent = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+        
+        daysContainer.innerHTML = '';
+        
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        
+        const startingDayOfWeek = firstDay.getDay();
+        
+        const prevMonthLastDay = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
+        for (let i = startingDayOfWeek - 1; i >= 0; i--) {
+          const dayBtn = document.createElement('button');
+          dayBtn.textContent = prevMonthLastDay - i;
+          dayBtn.classList.add('other-month');
+          dayBtn.disabled = true;
+          dayBtn.style.setProperty('--i', startingDayOfWeek - i);
+          daysContainer.appendChild(dayBtn);
+        }
+        
+        for (let i = 1; i <= lastDay.getDate(); i++) {
+          const dayBtn = document.createElement('button');
+          dayBtn.setAttribute('data-day', i);
+          dayBtn.style.setProperty('--i', startingDayOfWeek + i);
+          
+          if (i === today.getDate() && 
+              date.getMonth() === today.getMonth() && 
+              date.getFullYear() === today.getFullYear()) {
+            dayBtn.classList.add('today');
+          }
+          
+          if (i === selectedDate.getDate() && 
+              date.getMonth() === selectedDate.getMonth() && 
+              date.getFullYear() === selectedDate.getFullYear()) {
+            dayBtn.classList.add('selected');
+          }
+          
+          dayBtn.addEventListener('click', function() {
+            document.querySelectorAll('.days button').forEach(btn => {
+              btn.classList.remove('selected');
+            });
+            
+            this.classList.add('selected');
+            
+            selectedDate = new Date(date.getFullYear(), date.getMonth(), i);
+            updateSelectedDate(selectedDate);
+          });
+          
+          daysContainer.appendChild(dayBtn);
+        }
+        
+        const totalDaysDisplayed = startingDayOfWeek + lastDay.getDate();
+        
+        const daysNeeded = totalDaysDisplayed > 35 ? 42 : 35;
+        const daysFromNextMonth = daysNeeded - totalDaysDisplayed;
+        
+        for (let i = 1; i <= daysFromNextMonth; i++) {
+          const dayBtn = document.createElement('button');
+          dayBtn.textContent = i;
+          dayBtn.classList.add('other-month');
+          dayBtn.disabled = true;
+          dayBtn.style.setProperty('--i', startingDayOfWeek + lastDay.getDate() + i);
+          daysContainer.appendChild(dayBtn);
+        }
+        
+        if (selectedDate) {
+          updateSelectedDate(selectedDate);
+        }
+      }
+    });
+  </script>
 </body>
 </html>
