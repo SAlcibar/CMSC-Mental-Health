@@ -19,6 +19,7 @@
       --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
       --border-radius: 16px;
       --box-radius: 10px;
+      --navbar-width: 200px; /* Define navbar width as a variable */
     }
     
     * {
@@ -31,25 +32,29 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--bg);
       color: var(--text);
+      height: 100vh;
+      overflow: hidden; /* Prevent scrolling on the body */
     }
     
     /* Main content container - respects the navbar */
     .main-content {
       display: flex;
-      justify-content: center;
-      padding: 20px;
-      margin-left: 200px; /* Space for the sidebar/navbar */
+      height: 100vh; /* Full viewport height */
+      padding: 12px;
+      margin-left: var(--navbar-width); /* Space for the sidebar/navbar */
+      box-sizing: border-box;
     }
     
     .calendar-container {
       width: 100%;
-      max-width: 900px;
-      margin: 20px auto;
+      height: 100%; /* Full height of the parent container */
       border-radius: var(--border-radius);
       box-shadow: var(--shadow);
       background-color: var(--bg-card);
       overflow: hidden;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex; /* Make it a flex container */
+      flex-direction: column; /* Stack children vertically */
     }
 
     .calendar-container:hover {
@@ -61,44 +66,30 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 28px;
+      padding: 32px 40px; /* Increased padding to make header bigger */
       background-color: blue;
       color: white;
     }
     
     .month-year {
-      font-size: 26px;
+      font-size: 34px; /* Increased font size */
       font-weight: 700;
       letter-spacing: -0.5px;
     }
     
-    .calendar-subheader {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 28px;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .current-year-display {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text-light);
-    }
-    
     .nav-buttons {
       display: flex;
-      gap: 12px;
+      gap: 18px; /* Increased gap */
     }
     
     .nav-button {
-      width: 40px;
-      height: 40px;
+      width: 48px; /* Increased size */
+      height: 48px; /* Increased size */
       border-radius: 50%;
       background-color: rgba(255, 255, 255, 0.2);
       border: none;
       color: white;
-      font-size: 18px;
+      font-size: 22px; /* Increased font size */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -120,14 +111,17 @@
       font-size: 18px;
       color: var(--text-light);
       background-color: var(--bg);
+      border-bottom: 1px solid var(--border);
     }
     
     .days {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
-      padding: 20px;
+      gap: 8px;
+      padding: 16px;
       background-color: var(--bg);
+      flex: 1; /* Allow days container to expand */
+      overflow-y: auto; /* Add scrolling if needed */
     }
 
     .days button {
@@ -258,7 +252,7 @@
     
     .current-date {
       text-align: center;
-      padding: 20px;
+      padding: 16px;
       font-size: 17px;
       color: var(--text);
       border-top: 1px solid var(--border);
@@ -275,7 +269,7 @@
       display: flex;
       justify-content: center;
       gap: 12px;
-      padding: 20px;
+      padding: 16px;
       border-top: 1px solid var(--border);
       background-color: var(--bg-card);
     }
@@ -309,13 +303,6 @@
       border-color: var(--primary-dark);
     }
     
-    .month-indicator {
-      padding: 20px;
-      text-align: center;
-      font-size: 16px;
-      color: var(--text-light);
-    }
-    
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -337,15 +324,28 @@
     @media (max-width: 992px) {
       .main-content {
         margin-left: 0;
-        padding: 10px;
+        padding: 8px;
       }
       
       .calendar-container {
-        margin: 60px auto 10px auto;
+        margin: 60px auto 0 auto;
+        height: calc(100vh - 70px);
       }
       
       .weekdays {
         font-size: 16px;
+      }
+      
+      :root {
+        --navbar-width: 0px; /* Adjust for mobile */
+      }
+      
+      .calendar-header {
+        padding: 24px 20px; /* Smaller padding on mobile */
+      }
+      
+      .month-year {
+        font-size: 28px; /* Smaller font size on mobile */
       }
     }
   </style>
@@ -361,10 +361,6 @@
           <button class="nav-button prev-month">←</button>
           <button class="nav-button next-month">→</button>
         </div>
-      </div>
-      <div class="calendar-subheader">
-        <div class="current-year-display">2025</div>
-        <div id="month-name">April</div>
       </div>
       <div class="weekdays">
         <div>Sun</div>
@@ -451,16 +447,12 @@
       
       function renderCalendar(date) {
         const monthYear = document.querySelector('.month-year');
-        const yearDisplay = document.querySelector('.current-year-display');
-        const monthDisplay = document.getElementById('month-name');
         const daysContainer = document.getElementById('calendar-days');
         const today = new Date();
         
         const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
                            'July', 'August', 'September', 'October', 'November', 'December'];
         monthYear.textContent = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
-        yearDisplay.textContent = date.getFullYear();
-        monthDisplay.textContent = monthNames[date.getMonth()];
         
         daysContainer.innerHTML = '';
         
