@@ -6,6 +6,26 @@
     <title>Main Chat</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/navbar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/chat.css') }}">
+    <style>
+        /* Add custom styles for the reset chat button */
+        .reset-chat-button {
+            position: fixed;
+            top: 20px; /* Move to the top */
+            right: 20px; /* Align to the right */
+            padding: 10px 20px;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+        }
+
+        .reset-chat-button:hover {
+            background-color: #e60000;
+        }
+    </style>
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -13,7 +33,6 @@
         <div class="chat-container">
             <div class="chat-header">
                 AI Chat
-                <button id="reset-chat-button" class="reset-chat-button">Reset Chat</button>
             </div>
             <div class="chat-window" id="chat-window"></div>
             <div class="chat-input-container">
@@ -22,6 +41,10 @@
             </div>
         </div>
     </div>
+
+    <!-- Reset Chat Button -->
+    <button id="reset-chat-button" class="reset-chat-button">Reset Chat</button>
+
     <script>
         const chatWindow = document.getElementById('chat-window');
         const userInput = document.getElementById('user-input');

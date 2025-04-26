@@ -1,27 +1,115 @@
+/* General Page Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f9fa;
+    color: #333;
+}
+
+/* Flex Layout */
+.full-page {
+    display: flex;
+}
+
+/* Content with Sidebar */
+.page-content {
+    flex: 1;
+    margin-left: 250px; /* Width of sidebar */
+    padding: 40px 50px;
+}
+
+/* Top Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    color: #2a6478;
+    font-size: 32px;
+    margin: 0;
+}
+
+a.edit-button {
+    text-decoration: none;
+    color: white;
+    background-color: #2a6478;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+a.edit-button:hover {
+    background-color: #1e4d5e;
+    transform: scale(1.05);
+}
+
+/* Profile Section */
+.profile-section {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.profile-section h2 {
+    color: #2a6478;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.profile-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.profile-section li {
+    padding: 10px 0;
+    font-size: 16px;
+    color: #444;
+}
+
+.profile-section strong {
+    color: #2a6478;
+}
+
+/* Flash Message Styling */
 #flash-container {
     position: fixed;
-    top: 50%;
+    top: 10px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
     z-index: 9999;
     text-align: center;
 }
 
 .flash-message {
     display: inline-block;
-    background-color: rgba(0, 0, 0, 0.85);
-    color: #fff;
+    background-color: #4CAF50;
+    color: white;
     padding: 1rem 2rem;
     border-radius: 8px;
     font-size: 1.1rem;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     opacity: 1;
-    animation: fadeOut 2s forwards;
+    animation: fadeOut 3s forwards;
 }
 
 /* Fade out animation */
 @keyframes fadeOut {
-    0%   { opacity: 1; }
-    80%  { opacity: 1; }
+    0% { opacity: 1; }
+    80% { opacity: 1; }
     100% { opacity: 0; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .page-content {
+        margin-left: 0;
+        padding-top: 100px;
+    }
 }

@@ -3,92 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css') }}">
     <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/navbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css') }}">
 </head>
 <body>
     {% include 'navbar.html' %}
-    <h1 style="padding-bottom: 10px;">Welcome, {{ first_name|capitalize }}!</h1>
-    <a href="{{ url_for('survey') }}">Edit Fitness Goals</a>
+    <div class="full-page">
+        <div class="page-content">
+            <h1>Welcome, {{ first_name|capitalize }}!</h1>
+            <a href="{{ url_for('survey') }}" class="edit-button">Edit Fitness Goals</a>
 
-    <!-- Fitness Goals -->
-    <h2 style="padding-bottom: 10px;">Your Fitness Goals:</h2>
-    <ul>
-        {% if fitness_goals %}
-            {% for goal in fitness_goals %}
-                <li style="padding-left: 20px;">
-                    {{ goal }}
-                </li>
-            {% endfor %}
-        {% else %}
-            <p>No fitness goals set.</p>
-        {% endif %}
-    </ul>
+            <div class="profile-section">
+                <h2>Profile Information</h2>
+                <ul>
+                    {% if fitness_goals %}
+                        <li><strong>Fitness Goals:</strong> {{ fitness_goals | join(', ') }}</li>
+                    {% else %}
+                        <li><strong>Fitness Goals:</strong> None set</li>
+                    {% endif %}
 
-    <!-- Fitness Experience -->
-    <h2 style="padding-bottom: 10px;">Your Fitness Experience Level:</h2>
-    <ul>
-        {% if fitness_experience %}
-            {% for experience in fitness_experience %}
-                <li style="padding-left: 20px;">
-                    {{ experience }}
-                </li>
-            {% endfor %}
-        {% else %}
-            <p>No fitness experience level set.</p>
-        {% endif %}
-    </ul>
+                    {% if fitness_experience %}
+                        <li><strong>Experience Level:</strong> {{ fitness_experience | join(', ') }}</li>
+                    {% else %}
+                        <li><strong>Experience Level:</strong> None set</li>
+                    {% endif %}
 
-    <!-- Preferred Workout Time -->
-    <h2 style="padding-bottom: 10px;">Your Preferred Workout Time:</h2>
-    <ul>
-        {% if workout_time %}
-            {% for time in workout_time %}
-                <li style="padding-left: 20px;">
-                    {{ time }}
-                </li>
-            {% endfor %}
-        {% else %}
-            <p>No preferred workout time set.</p>
-        {% endif %}
-    </ul>
+                    {% if workout_time %}
+                        <li><strong>Preferred Workout Time:</strong> {{ workout_time | join(', ') }}</li>
+                    {% else %}
+                        <li><strong>Preferred Workout Time:</strong> None set</li>
+                    {% endif %}
 
-    <!-- Dietary Preferences -->
-    <h2 style="padding-bottom: 10px;">Your Dietary Preferences:</h2>
-    <ul>
-        {% if dietary_preferences %}
-            {% for preference in dietary_preferences %}
-                <li style="padding-left: 20px;">
-                    {{ preference }}
-                </li>
-            {% endfor %}
-        {% else %}
-            <p>No dietary preferences set.</p>
-        {% endif %}
-    </ul>
+                    {% if dietary_preferences %}
+                        <li><strong>Dietary Preferences:</strong> {{ dietary_preferences | join(', ') }}</li>
+                    {% else %}
+                        <li><strong>Dietary Preferences:</strong> None set</li>
+                    {% endif %}
 
-    <!-- Fitness Challenges -->
-    <h2 style="padding-bottom: 10px;">Your Fitness Challenges:</h2>
-    <ul>
-        {% if fitness_challenges %}
-            {% for challenge in fitness_challenges %}
-                <li style="padding-left: 20px;">
-                    {{ challenge }}
-                </li>
-            {% endfor %}
-        {% else %}
-            <p>No fitness challenges set.</p>
-        {% endif %}
-    </ul>
-
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <div id="flash-container">
-        {% for message in messages %}
-          <div class="flash-message">{{ message }}</div>
-        {% endfor %}
-      </div>
-    {% endif %}
-    {% endwith %}
+                    {% if fitness_challenges %}
+                        <li><strong>Fitness Challenges:</strong> {{ fitness_challenges | join(', ') }}</li>
+                    {% else %}
+                        <li><strong>Fitness Challenges:</strong> None set</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

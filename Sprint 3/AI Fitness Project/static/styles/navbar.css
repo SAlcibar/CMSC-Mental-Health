@@ -1,15 +1,21 @@
+/* General styling for the sidebar */
 body {
     margin: 0;
     padding: 0;
     display: flex;
     height: 100vh;
     font-family: 'Roboto', Arial, sans-serif;
-    background-color: #f9f9f9; /* Light blue background */
+    background-color: #f9f9f9;
+    overflow-x: hidden;
 }
 
 .sidebar {
+    position: fixed; /* Make sidebar fixed while scrolling */
+    left: 0;
+    top: 0;
     width: 250px;
-    background-color: #2a6478; /* Dark blue sidebar */
+    height: 100%;
+    background-color: #2a6478;
     color: white;
     display: flex;
     flex-direction: column;
@@ -42,17 +48,46 @@ body {
 }
 
 .sidebar .menu a:hover {
-    color: #d9e8ea; /* Lighter blue on hover */
+    color: #d9e8ea;
     transform: scale(1.05);
 }
 
+/* Main content styling */
 .main-content {
-    flex: 1; /* Take up the remaining space to the right of the navbar */
+    margin-left: 250px; /* Room for the sidebar */
+    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center content vertically */
-    align-items: center; /* Center content horizontally */
-    padding: 20px;
-    text-align: center;
-    background-color: #f9f9f9; /* Light gray background for the main content */
+    padding: 40px 50px;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+}
+
+/* Make sure links or header content doesn't overlap weirdly */
+.page-content {
+    width: 100%;
+}
+
+/* Bottom menu styling */
+.bottom-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 40px; /* Controls how high up it sits */
+}
+
+.bottom-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 15px;
+    text-align: left;
+    border-radius: 4px;
+    background-color: transparent;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.bottom-menu a:hover {
+    color: #d9e8ea;
+    transform: scale(1.05);
 }
