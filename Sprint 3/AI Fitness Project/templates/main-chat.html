@@ -23,7 +23,20 @@
         const chatWindow = document.getElementById('chat-window');
         const userInput = document.getElementById('user-input');
         const sendButton = document.getElementById('send-button');
-
+    
+        // Load recent chat context
+        const recentContext = `{{ recent_context | safe }}`;
+        if (recentContext) {
+            const lines = recentContext.split('\n');
+            lines.forEach(line => {
+                if (line.startsWith('User:')) {
+                    addChatBubble(line.replace('User: ', ''), 'user');
+                } else if (line.startsWith('AI:')) {
+                    addChatBubble(line.replace('AI: ', ''), 'bot');
+                }
+            });
+        }
+    
         // Function to add a chat bubble to the chat window
         function addChatBubble(message, sender) {
             const bubble = document.createElement('div');
@@ -32,49 +45,47 @@
             chatWindow.appendChild(bubble);
             chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to the bottom
         }
-
-        // Event listener for the send button
-        sendButton.addEventListener('click', async () => {
+    
+        // Function to handle sending a message
+        async function handleSendMessage() {
             const message = userInput.value.trim();
             if (message) {
-             // Add the user's message to the chat window
                 addChatBubble(message, 'user');
-
-                // Clear the input field
                 userInput.value = '';
-
+    
                 try {
-                    // Send the message to the server
                     const response = await fetch('/main-chat', {
                         method: 'POST',
-                        headers: {
-                           'Content-Type': 'application/json'
-                      },
-                     body: JSON.stringify({ message })
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message })
                     });
-
+    
                     if (response.ok) {
                         const data = await response.json();
-                        const botMessage = data.response;
-
-                        // Add the bot's response to the chat window
-                        addChatBubble(botMessage, 'bot');
+                        addChatBubble(data.response, 'bot');
                     } else {
-                        console.error('Error:', response.statusText);
                         addChatBubble('Error: Unable to get a response from the server.', 'bot');
                     }
                 } catch (error) {
-                    console.error('Error:', error);
                     addChatBubble('Error: Something went wrong.', 'bot');
                 }
             }
-        });
+        }
+    
+        // Event listener for the send button
+        sendButton.addEventListener('click', handleSendMessage);
 
-        // Allow pressing Enter to send a message
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendButton.click();
+        // Allow the Enter key to trigger the send button
+        userInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent default form submission behavior
+                handleSendMessage();
             }
+        });
+    
+        // Trigger exit chat logic when the user leaves the page
+        window.addEventListener('beforeunload', async () => {
+            await fetch('/exit-chat', { method: 'POST' });
         });
     </script>
 </body>
