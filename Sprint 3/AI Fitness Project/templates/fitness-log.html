@@ -29,24 +29,27 @@
     
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
       background-color: var(--bg);
       color: var(--text);
+    }
+    
+    /* Main content container - respects the navbar */
+    .main-content {
+      display: flex;
+      justify-content: center;
       padding: 20px;
+      margin-left: 200px; /* Space for the sidebar/navbar */
     }
     
     .calendar-container {
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    background-color: var(--bg-card);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+      width: 100%;
+      max-width: 900px;
+      margin: 20px auto;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      background-color: var(--bg-card);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .calendar-container:hover {
@@ -112,39 +115,38 @@
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       padding: 16px 0;
-      margin-left: 25px;
+      text-align: center;
       font-weight: 600;
-      font-size: 20px;
+      font-size: 18px;
       color: var(--text-light);
       background-color: var(--bg);
     }
     
     .days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    padding: 20px;
-    background-color: var(--bg);
-}
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      padding: 20px;
+      background-color: var(--bg);
+    }
 
-.days button {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  background-color: white;
-  border: 1px solid var(--box-border);
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  border-radius: var(--box-radius);
-  color: var(--text);
-  transition: all 0.2s ease;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--box-shadow);
-}
-
+    .days button {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background-color: white;
+      border: 1px solid var(--box-border);
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: var(--box-radius);
+      color: var(--text);
+      transition: all 0.2s ease;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--box-shadow);
+    }
     
     .days button:hover:not([disabled]) {
       border-color: var(--primary-light);
@@ -160,14 +162,15 @@
     }
 
     .days button::before {
-    content: attr(data-day);
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    font-size: 14px;
-    font-weight: bold;
-    color: var(--text-light);
-}
+      content: attr(data-day);
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--text-light);
+    }
+    
     .days button.today::after {
       content: '';
       position: absolute;
@@ -195,56 +198,57 @@
     }
 
     .popup-overlay {
-        position: fixed;
-        inset: 0;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        background-color: rgba(0, 0, 0, 0.5);
+      position: fixed;
+      inset: 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
     }
 
     .popup-content {
-        background-color: white;
-        padding: 20px;
-        border-radius: 12px;
-        text-align: center;
-        max-width: 300px;
-        width: 90%;
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 300px;
+      width: 90%;
     }
 
     .popup-buttons {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        margin: 1rem 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin: 1rem 0;
     }
 
     .popup-buttons button {
-        flex: 1;
-        padding: 10px;
-        border-radius: 8px;
-        border: none;   
-        font-weight: 600;
-        background-color: #e0e7ff;
-        transition: background-color 0.2s;
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;   
+      font-weight: 600;
+      background-color: #e0e7ff;
+      transition: background-color 0.2s;
     }
 
     .popup-buttons button:hover {
-        background-color: #6366f1;
-        color: white;
+      background-color: #6366f1;
+      color: white;
     }
 
     #popupCloseBtn {
-        background-color: #f1f5f9;
-        padding: 8px 16px;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
+      background-color: #f1f5f9;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
     #popupCloseBtn:hover {
-        background-color: #cbd5e1;
+      background-color: #cbd5e1;
     }
     
     .days button.other-month {
@@ -328,52 +332,68 @@
       animation-delay: calc(var(--i) * 0.02s);
       opacity: 0;
     }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+      .main-content {
+        margin-left: 0;
+        padding: 10px;
+      }
+      
+      .calendar-container {
+        margin: 60px auto 10px auto;
+      }
+      
+      .weekdays {
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
-    {% include 'navbar.html' %}
-  <div class="calendar-container">
-    <div class="calendar-header">
-      <div class="month-year">April 2025</div>
-      <div class="nav-buttons">
-        <button class="nav-button prev-month">←</button>
-        <button class="nav-button next-month">→</button>
+  {% include 'navbar.html' %}
+  
+  <div class="main-content">
+    <div class="calendar-container">
+      <div class="calendar-header">
+        <div class="month-year">April 2025</div>
+        <div class="nav-buttons">
+          <button class="nav-button prev-month">←</button>
+          <button class="nav-button next-month">→</button>
+        </div>
       </div>
-    </div>
-    <div class="calendar-subheader">
-      <div class="current-year-display">2025</div>
-      <div id="month-name">April</div>
-    </div>
-    <div class="weekdays">
-      <div>Sun</div>
-      <div>Mon</div>
-      <div>Tue</div>
-      <div>Wed</div>
-      <div>Thur</div>
-      <div>Fri</div>
-      <div>Sat</div>
-    </div>
-    <div class="days" id="calendar-days"></div>
-    <div class="current-date" id="selected-date">
-      <span class="selected-date-label">Selected Date:</span> April 24, 2025
-    </div>
-    <div class="calendar-footer">
+      <div class="calendar-subheader">
+        <div class="current-year-display">2025</div>
+        <div id="month-name">April</div>
+      </div>
+      <div class="weekdays">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+      </div>
+      <div class="days" id="calendar-days"></div>
+      <div class="current-date" id="selected-date">
+        <span class="selected-date-label">Selected Date:</span> April 24, 2025
+      </div>
+      <div class="calendar-footer">
         <button class="calendar-action" id="reset-btn">Today</button>
         <button class="calendar-action primary" id="select-btn">Select Date</button>
       </div>
-      
-      <div id="popupWindow" class="popup-overlay">
-        <div class="popup-content">
-          <h3>Select Activity</h3>
-          <div class="popup-buttons">
-            <button id="popupCardioBtn">Cardio</button>
-            <button id="popupMuscularBtn">Muscular</button>
-          </div>
-          <button id="popupCloseBtn">Close</button>
-        </div>
+    </div>
+  </div>
+  
+  <div id="popupWindow" class="popup-overlay">
+    <div class="popup-content">
+      <h3>Select Activity</h3>
+      <div class="popup-buttons">
+        <button id="popupCardioBtn">Cardio</button>
+        <button id="popupMuscularBtn">Muscular</button>
       </div>
-      
-      
+      <button id="popupCloseBtn">Close</button>
     </div>
   </div>
 
@@ -381,25 +401,21 @@
     document.addEventListener('DOMContentLoaded', function() {
       let currentDate = new Date();
       let selectedDate = new Date();
-      let viewDate = new Date(); 
-      
+      let viewDate = new Date();
 
       renderCalendar(viewDate);
-      
 
       document.querySelector('.prev-month').addEventListener('click', function() {
         viewDate.setMonth(viewDate.getMonth() - 1);
         renderCalendar(viewDate);
-        this.blur(); 
+        this.blur();
       });
-      
       
       document.querySelector('.next-month').addEventListener('click', function() {
         viewDate.setMonth(viewDate.getMonth() + 1);
         renderCalendar(viewDate);
-        this.blur(); 
+        this.blur();
       });
-      
       
       document.getElementById('reset-btn').addEventListener('click', function() {
         viewDate = new Date();
@@ -409,24 +425,22 @@
         this.blur();
       });
       
-      
-        document.getElementById('select-btn').addEventListener('click', function () {
-            document.getElementById('popupWindow').style.display = 'flex';
-            this.blur();
-        });
+      document.getElementById('select-btn').addEventListener('click', function() {
+        document.getElementById('popupWindow').style.display = 'flex';
+        this.blur();
+      });
 
-        document.getElementById('popupCloseBtn').addEventListener('click', function () {
-            document.getElementById('popupWindow').style.display = 'none';
-        });
+      document.getElementById('popupCloseBtn').addEventListener('click', function() {
+        document.getElementById('popupWindow').style.display = 'none';
+      });
 
-        document.getElementById('popupCardioBtn').addEventListener('click', function () {
-            window.open("{{ url_for('cardio_log') }}");
-    });
-
-    document.getElementById('popupMuscularBtn').addEventListener('click', function () {
+      document.getElementById('popupCardioBtn').addEventListener('click', function() {
         window.open("{{ url_for('cardio_log') }}");
-    });
+      });
 
+      document.getElementById('popupMuscularBtn').addEventListener('click', function() {
+        window.open("{{ url_for('workout_log') }}"); // Fixed to correct endpoint
+      });
 
       function updateSelectedDate(date) {
         const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
@@ -442,23 +456,18 @@
         const daysContainer = document.getElementById('calendar-days');
         const today = new Date();
         
-        
         const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
                            'July', 'August', 'September', 'October', 'November', 'December'];
         monthYear.textContent = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
         yearDisplay.textContent = date.getFullYear();
         monthDisplay.textContent = monthNames[date.getMonth()];
         
-       
         daysContainer.innerHTML = '';
-        
         
         const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
         const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
         
-        
         const startingDayOfWeek = firstDay.getDay();
-        
         
         const prevMonthLastDay = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
         for (let i = startingDayOfWeek - 1; i >= 0; i--) {
@@ -470,19 +479,16 @@
           daysContainer.appendChild(dayBtn);
         }
         
-        
         for (let i = 1; i <= lastDay.getDate(); i++) {
           const dayBtn = document.createElement('button');
           dayBtn.setAttribute('data-day', i);
           dayBtn.style.setProperty('--i', startingDayOfWeek + i);
           
-         
           if (i === today.getDate() && 
               date.getMonth() === today.getMonth() && 
               date.getFullYear() === today.getFullYear()) {
             dayBtn.classList.add('today');
           }
-          
           
           if (i === selectedDate.getDate() && 
               date.getMonth() === selectedDate.getMonth() && 
@@ -490,15 +496,12 @@
             dayBtn.classList.add('selected');
           }
           
-          
           dayBtn.addEventListener('click', function() {
             document.querySelectorAll('.days button').forEach(btn => {
               btn.classList.remove('selected');
             });
             
-            
             this.classList.add('selected');
-            
             
             selectedDate = new Date(date.getFullYear(), date.getMonth(), i);
             updateSelectedDate(selectedDate);
@@ -507,12 +510,10 @@
           daysContainer.appendChild(dayBtn);
         }
         
-       
         const totalDaysDisplayed = startingDayOfWeek + lastDay.getDate();
         
         const daysNeeded = totalDaysDisplayed > 35 ? 42 : 35;
         const daysFromNextMonth = daysNeeded - totalDaysDisplayed;
-        
         
         for (let i = 1; i <= daysFromNextMonth; i++) {
           const dayBtn = document.createElement('button');
@@ -523,13 +524,11 @@
           daysContainer.appendChild(dayBtn);
         }
         
-        
         if (selectedDate) {
           updateSelectedDate(selectedDate);
         }
       }
     });
-
   </script>
 </body>
 </html>
