@@ -1,5 +1,5 @@
 from backend.db import db
-from flask_login import UserMixin
+from flask_login import UserMixin # type: ignore
 
 # Creates our Sqlite table that holds user login/register info.
 class User(db.Model, UserMixin):
