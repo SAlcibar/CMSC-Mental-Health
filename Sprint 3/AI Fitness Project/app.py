@@ -160,6 +160,10 @@ def cardio_log():
 
     return render_template('cardio-log.html', form=form)
 
+@app.route('/calendarPage.html')
+def calendar_page():
+    return render_template('calendarPage.html')
+
  
 with app.app_context():
     db.create_all()  

@@ -7,22 +7,24 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/navbar.css') }}">
 </head>
 <body>
-    <div id="navbar">
-        <nav class="navbar">
-            <div class="navdiv">
-                <div class="logo"><a href="/">FitAI</a></div>
-                <ul>
-                    <li><a title="Home" href="/">Home</a></li>
-                    <li><a title="Fitness Log" href="/fitness-log">Fitness Log</a></li>
-                    <li><a title="AI Chat" href="/main-chat">AI Chat</a></li>
-                    <li><a title="About" href="/about">About</a></li>
-                </ul>
-                <div class="buttons">
-                    <button><a href="{{ url_for('logout') }}" title="Sign Out">Sign Out</a></button>
-                </div>
-            </div>
-        </nav>
+    <div class="sidebar">
+        <!-- Logo -->
+        <div class="logo">FitAI</div>
+
+        <!-- Navigation Links -->
+        <div class="menu">
+            <a href="/" title="Home">Home</a>
+            <a href="/calendarPage.html" title="Fitness Log">Fitness Log</a>
+            <a href="/main-chat" title="AI Chat">AI Chat</a>
+            <a href="/about" title="About">About</a>
+        </div>
+
+        <!-- Sign Out Button -->
+        <div class="menu" style="margin-top: auto;">
+            <a href="{{ url_for('logout') }}" title="Sign Out" style="background-color: #2a6478; color: white; text-align: center; padding: 10px; border-radius: 6px;">
+                Sign Out
+            </a>
+        </div>
     </div>
-    
 </body>
 </html>
